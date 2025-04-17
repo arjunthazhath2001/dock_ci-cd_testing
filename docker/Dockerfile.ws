@@ -16,8 +16,9 @@ COPY ./apps/websocket ./apps/websocket
 
 
 RUN bun install
-RUN bun run db:migrate
 
-EXPOSE 8080
+RUN bun run generate:db
+
+EXPOSE 8081
 
 CMD ["bun", "run", "start:websocket" ]

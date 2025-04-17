@@ -1,5 +1,7 @@
 FROM oven/bun:1
 
+ARG DATABASE_URL
+
 WORKDIR /usr/src/app
 
 
@@ -12,13 +14,15 @@ COPY ./package.json ./package.json
 
 COPY ./turbo.json ./turbo.json
 
-COPY ./apps/frontend ./apps/frontend
+COPY ./apps/web ./apps/web
 
 
 RUN bun install
-RUN bun run db:migrate
-RUN bun run build
 
-EXPOSE 8080
+RUN bun run generate:db
 
-CMD ["bun", "run", "start:frontend" ]
+RUN DATABASE_URL=${DATABASE_URL} bun run build
+
+EXPOSE 3000
+
+CMD ["bun", "run", "start:web" ]
